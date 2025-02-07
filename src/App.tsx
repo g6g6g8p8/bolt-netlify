@@ -7,6 +7,7 @@ import { cn } from './lib/utils';
 import ProjectDetail from './components/ProjectDetail';
 import { getImageColor } from './lib/utils';
 import { useAbout } from './hooks/useAbout';
+import About from './components/About';
 
 function DesktopSidebar() {
   const { projects } = useProjects();
@@ -256,36 +257,6 @@ function Home() {
             <ArrowRight size={18} />
           </Link>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function About() {
-  const { about, loading } = useAbout();
-
-  return (
-    <div className="p-8 max-w-3xl">
-      <div className="lg:hidden flex items-center justify-between mb-8">
-        <Link to="/" className="text-title-2">
-          Giulio Pinotti
-        </Link>
-        <Link
-          to="/about"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-border/10 hover:bg-border/20 transition-colors"
-        >
-          <UserCircle size={24} className="opacity-60" />
-        </Link>
-      </div>
-      <h2 className="text-title-1 mb-8">About Me</h2>
-      <div className="prose">
-        {loading ? (
-          <p className="text-body">Loading...</p>
-        ) : about ? (
-          <div dangerouslySetInnerHTML={{ __html: about.content.replace(/\n/g, '<br />') }} />
-        ) : (
-          <p className="text-body">No content found.</p>
-        )}
       </div>
     </div>
   );
