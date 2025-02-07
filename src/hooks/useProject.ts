@@ -16,7 +16,7 @@ export function useProject(slug: string | undefined) {
       try {
         const { data, error } = await supabase
           .from('projects')
-          .select()
+          .select('*')
           .eq('slug', slug)
           .maybeSingle();
 

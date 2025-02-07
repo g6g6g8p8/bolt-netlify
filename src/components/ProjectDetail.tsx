@@ -11,6 +11,7 @@ export default function ProjectDetail() {
   const navigate = useNavigate();
   const [imageColor, setImageColor] = useState<string>('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoLoadError, setVideoLoadError] = useState(false);
 
   useEffect(() => {
     if (project?.image_url) {
@@ -75,6 +76,10 @@ export default function ProjectDetail() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + (project.gallery?.length || 1)) % (project.gallery?.length || 1));
   };
 
+  const handleVideoError = () => {
+    setVideoLoadError(true);
+  };
+
   return (
     <div className="lg:pt-0">
       <motion.div
@@ -115,8 +120,8 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        <div className="p-8">
-          <div className="space-y-6">
+        <div className="md:p-8">
+          <div className="space-y-6 px-8 md:px-0">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => handleFilter('client', project.client)}
@@ -161,28 +166,54 @@ export default function ProjectDetail() {
             )}
           </div>
 
-          <div className="prose max-w-none text-body mt-8" dangerouslySetInnerHTML={{ __html: project.content }} />
+          <div className="prose max-w-none text-body mt-8 px-8 md:px-0" dangerouslySetInnerHTML={{ __html: project.content }} />
+
+          {project.video_url && (
+            <div className="mt-8">
+              {console.log("Vimeo URL:", project.video_url)}
+              {/* Use a regular expression to extract the video ID from the URL */}
+              {(() => {
+                const match = project.video_url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+                const videoId = match ? match[1] : null;
+
+                if (videoId) {
+                  console.log("Vimeo Video ID:", videoId);
+                  return (
+                    <>
+                      {videoLoadError ? (
+                        <p>Failed to load video. Please check your connection or try again later.</p>
+                      ) : (
+                        <iframe
+                          src={`https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&muted=1&playsinline=1`}
+                          title="Project Video"
+                          width="100%"
+                          height="360"
+                          frameBorder="0"
+                          allow="autoplay; fullscreen"
+                          allowFullScreen
+                          loading="lazy"
+                          onError={handleVideoError}
+                        />
+                      )}
+                    </>
+                  );
+                } else {
+                  console.error("Invalid Vimeo URL format");
+                  return <p>Invalid Vimeo URL format</p>;
+                }
+              })()}
+            </div>
+          )}
 
           {project.gallery && project.gallery.length > 0 && (
             <div className="mt-24">
               <div className="relative">
-                <div className="overflow-hidden aspect-[4/5]">
-                  <motion.div
-                    className="flex transition-transform duration-500"
-                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                  >
-                    {project.gallery.map((image, index) => (
-                      <div key={index} className="min-w-full">
-                        <div className="aspect-[4/5] overflow-hidden">
-                          <img
-                            src={image}
-                            alt={`${project.title} gallery image ${index + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </motion.div>
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img
+                    src={project.gallery[currentIndex]}
+                    alt={`${project.title} gallery image ${currentIndex + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="flex justify-center mt-4 space-x-2">
                   {project.gallery.map((_, index) => (

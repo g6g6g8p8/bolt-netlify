@@ -18,6 +18,13 @@ export interface Database {
           tags: string[]
           link: string | null
           created_at: string
+          slug: string | null
+          content: string | null
+          client: string | null
+          year: string | null
+          role: string | null
+          gallery: string[] | null
+          video_url: string | null
         }
         Insert: {
           id?: number
@@ -27,6 +34,13 @@ export interface Database {
           tags?: string[]
           link?: string | null
           created_at?: string
+          slug?: string | null
+          content?: string | null
+          client?: string | null
+          year?: string | null
+          role?: string | null
+          gallery?: string[] | null
+          video_url?: string | null
         }
         Update: {
           id?: number
@@ -36,6 +50,13 @@ export interface Database {
           tags?: string[]
           link?: string | null
           created_at?: string
+          slug?: string | null
+          content?: string | null
+          client?: string | null
+          year?: string | null
+          role?: string | null
+          gallery?: string[] | null
+          video_url?: string | null
         }
       }
       experiences: {
@@ -65,6 +86,25 @@ export interface Database {
           description?: string
           technologies?: string[]
           created_at?: string
+        }
+      }
+      about: {
+        Row: {
+          id: number
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          content: string
+          created_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          id?: number
+          content?: string
+          created_at?: string
+          video_url?: string | null
         }
       }
     }

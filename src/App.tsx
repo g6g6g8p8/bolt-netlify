@@ -6,6 +6,7 @@ import { useProjects, ProjectFilters } from './hooks/useProjects';
 import { cn } from './lib/utils';
 import ProjectDetail from './components/ProjectDetail';
 import { getImageColor } from './lib/utils';
+import { useAbout } from './hooks/useAbout';
 
 function DesktopSidebar() {
   const { projects } = useProjects();
@@ -261,25 +262,30 @@ function Home() {
 }
 
 function About() {
+  const { about, loading } = useAbout();
+
   return (
     <div className="p-8 max-w-3xl">
       <div className="lg:hidden flex items-center justify-between mb-8">
         <Link to="/" className="text-title-2">
           Giulio Pinotti
         </Link>
-        <Link 
+        <Link
           to="/about"
           className="w-10 h-10 flex items-center justify-center rounded-full bg-border/10 hover:bg-border/20 transition-colors"
         >
           <UserCircle size={24} className="opacity-60" />
         </Link>
       </div>
-      <h2 className="text-title-1 mb-8">About</h2>
+      <h2 className="text-title-1 mb-8">About Me</h2>
       <div className="prose">
-        <p className="text-body">
-          Creative Director, Art & Design with 15+ years in advertising, blending strategy,
-          design, and storytelling to inspire and engage. Explore my work and passion for creativity.
-        </p>
+        {loading ? (
+          <p className="text-body">Loading...</p>
+        ) : about ? (
+          <div dangerouslySetInnerHTML={{ __html: about.content.replace(/\n/g, '<br />') }} />
+        ) : (
+          <p className="text-body">No content found.</p>
+        )}
       </div>
     </div>
   );
