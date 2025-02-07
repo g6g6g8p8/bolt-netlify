@@ -10,6 +10,7 @@ export default function ProjectDetail() {
   const { project, loading } = useProject(slug);
   const navigate = useNavigate();
   const [imageColor, setImageColor] = useState<string>('');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     if (project?.image_url) {
@@ -66,6 +67,14 @@ export default function ProjectDetail() {
     );
   }
 
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % (project.gallery?.length || 1));
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + (project.gallery?.length || 1)) % (project.gallery?.length || 1));
+  };
+
   return (
     <div className="lg:pt-0">
       <motion.div
@@ -76,7 +85,7 @@ export default function ProjectDetail() {
       >
         <Link
           to="/"
-          className="fixed top-8 right-8 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-background/90 backdrop-blur-sm text-foreground hover:bg-background/80 dark:bg-background/90 dark:text-foreground dark:hover:bg-background transition-colors"
+          className="fixed top-8 right-8 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-black text-foreground hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
         >
           <CloseIcon size={20} />
         </Link>
@@ -156,16 +165,36 @@ export default function ProjectDetail() {
 
           {project.gallery && project.gallery.length > 0 && (
             <div className="mt-24">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {project.gallery.map((image, index) => (
-                  <div key={index} className="aspect-video rounded-lg overflow-hidden">
-                    <img
-                      src={image}
-                      alt={`${project.title} gallery image ${index + 1}`}
-                      className="w-full h-full object-cover"
+              <div className="relative">
+                <div className="overflow-hidden aspect-[4/5]">
+                  <motion.div
+                    className="flex transition-transform duration-500"
+                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                  >
+                    {project.gallery.map((image, index) => (
+                      <div key={index} className="min-w-full">
+                        <div className="aspect-[4/5] overflow-hidden">
+                          <img
+                            src={image}
+                            alt={`${project.title} gallery image ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+                <div className="flex justify-center mt-4 space-x-2">
+                  {project.gallery.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentIndex ? 'bg-black dark:bg-white' : 'bg-gray-300 dark:bg-gray-700'
+                      }`}
                     />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
