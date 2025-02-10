@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { UserCircle, X as CloseIcon } from 'lucide-react';
 import { useAbout } from '../hooks/useAbout';
+import CloseButton from './CloseButton';
 
-function About() {
+const About = () => {
   const { about, loading } = useAbout();
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="about-page p-6">
       <Link
         to="/"
         className="fixed top-8 right-8 z-50 w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-black text-foreground hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
@@ -25,7 +26,11 @@ function About() {
           <UserCircle size={24} className="opacity-60" />
         </Link>
       </div>
-      <h2 className="text-title-1 mb-8">About Me</h2>
+      <h1 className="text-3xl font-bold mb-4">About</h1>
+      <p className="mb-4">
+        {/* Conteúdo da página About */}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
+      </p>
       <div className="prose">
         {loading ? (
           <p className="text-body">Loading...</p>
@@ -35,8 +40,9 @@ function About() {
           <p className="text-body">No content found.</p>
         )}
       </div>
+      <CloseButton />
     </div>
   );
-}
+};
 
 export default About;
