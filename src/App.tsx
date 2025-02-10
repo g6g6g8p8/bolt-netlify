@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, Link, useSearchParams, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink, Link, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { LinkedinIcon, FenceIcon as BehanceIcon, YoutubeIcon, CloudIcon, FilterIcon, ArrowRight, UserCircle } from 'lucide-react';
 import { useProjects, ProjectFilters } from './hooks/useProjects';
 import { cn } from './lib/utils';
 import ProjectDetail from './components/ProjectDetail';
 import { getImageColor } from './lib/utils';
-import { useAbout } from './hooks/useAbout';
 import About from './components/About';
 
 function DesktopSidebar() {
@@ -22,39 +21,43 @@ function DesktopSidebar() {
   }, {} as Record<string, typeof projects>);
 
   return (
-    <aside className="hidden lg:block fixed h-screen w-80 bg-background border-r border-border p-6 overflow-y-auto">
-      <Link to="/" className="text-title-2 block mb-8">
-        Giulio Pinotti
-      </Link>
-      
-      <nav className="space-y-8">
-        <div className="space-y-4">
-          {categories && Object.entries(categories).map(([category, items]) => (
-            <div key={category}>
-              <h2 className="text-subheadline font-medium opacity-60 mb-2">
-                {category} ({items.length})
-              </h2>
-              <ul className="space-y-2">
-                {items.map((project) => (
-                  <li key={project.id}>
-                    <NavLink
-                      to={`/projects/${project.slug}`}
-                      className={({ isActive }) =>
-                        cn(
-                          "block text-callout hover:opacity-80 transition-opacity",
-                          isActive ? "opacity-100" : "opacity-60"
-                        )
-                      }
-                    >
-                      {project.title}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+    <aside className="hidden lg:flex flex-col justify-between fixed h-screen w-80 bg-background border-r border-border p-6 overflow-y-auto">
+      <div>
+        <Link to="/" className="text-title-2 block mb-8">
+          Giulio Pinotti
+        </Link>
+        
+        <nav className="space-y-8">
+          <div className="space-y-4">
+            {categories && Object.entries(categories).map(([category, items]) => (
+              <div key={category}>
+                <h2 className="text-subheadline font-medium opacity-60 mb-2">
+                  {category} ({items.length})
+                </h2>
+                <ul className="space-y-2">
+                  {items.map((project) => (
+                    <li key={project.id}>
+                      <NavLink
+                        to={`/projects/${project.slug}`}
+                        className={({ isActive }) =>
+                          cn(
+                            "block text-callout hover:opacity-80 transition-opacity",
+                            isActive ? "opacity-100" : "opacity-60"
+                          )
+                        }
+                      >
+                        {project.title}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </nav>
+      </div>
 
+      <div className="space-y-8">
         <div className="space-y-2">
           <NavLink
             to="/about"
@@ -114,7 +117,7 @@ function DesktopSidebar() {
             <CloudIcon size={20} />
           </a>
         </div>
-      </nav>
+      </div>
     </aside>
   );
 }
